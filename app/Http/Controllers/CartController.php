@@ -64,4 +64,20 @@ class CartController extends Controller
             'message' => 'Item removed'
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        $cartItem = CartItem::findOrFail($id);
+        $cartItem->quantity = $request->input('quantity');
+        $cartItem->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cart item updated'
+        ]);
+    }
 }

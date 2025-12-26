@@ -9,8 +9,16 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::where('status', 1)->get();
-        return view('home', compact('products'));
+        $products = Product::where('status', 1)
+        ->with(['stock'])
+        ->get()
+        ->map(function ($product) {
+            $product->stock_quantity = $product->stock->quantity_available ?? 0;
+            return $product;
+        });
+
+        $cart = auth()->check() ? auth()->user()->cart()->with('items.product')->first() : ['items' => []];
+        return view('home', compact('products', 'cart'));
     }
 
     public function dashboard()

@@ -1,8 +1,13 @@
 <script setup>
+import { ref } from 'vue'
 import axios from 'axios'
 
 const props = defineProps({
-    cart: Object,
+    products: Array,
+    cart: {
+        type: Object,
+        default: () => ({ items: [] })
+    },
     isAuth: Boolean
 })
 
@@ -10,33 +15,40 @@ const redirectToLogin = () => {
     window.location.href = '/login'
 }
 
+// Remove item
 const removeItem = (id) => {
-    if (!props.isAuth) {
-        redirectToLogin()
-        return
-    }
+    if (!props.isAuth) return redirectToLogin()
 
     axios.post(`/cart/remove/${id}`)
         .then(() => location.reload())
         .catch(err => console.error(err))
 }
 
+// Place order
 const placeOrder = () => {
-    if (!props.isAuth) {
-        redirectToLogin()
-        return
-    }
+    if (!props.isAuth) return redirectToLogin()
 
     axios.post('/cart/checkout')
         .then(res => {
-             alert('Checkout success')
+            alert('Checkout success')
             window.location.href = `/orders/${res.data.order_id}`
         })
         .catch(err => {
             console.error(err)
             alert('Checkout failed')
         })
-} 
+}
+
+// Update quantity
+const updateQuantity = (itemId, qty) => {
+    if (!props.isAuth) return redirectToLogin()
+
+    if (qty < 1) return 
+
+    axios.post(`/cart/update/${itemId}`, { quantity: qty })
+        .then(() => location.reload())
+        .catch(err => console.error(err))
+}
 </script>
 
 <template>
@@ -64,8 +76,22 @@ const placeOrder = () => {
                 <tr v-for="item in cart.items" :key="item.id" class="border-t">
                     <td class="p-2">{{ item.product.name }}</td>
                     <td>₹ {{ item.product.price }}</td>
-                    <td>{{ item.quantity }}</td>
+
+                    <!-- Quantity controls -->
+                    <td class="flex items-center gap-2">
+                        <button @click="updateQuantity(item.id, item.quantity - 1)"
+                                class="px-2 py-1 border rounded">-</button>
+                        <input type="number"
+                               min="1"
+                               v-model.number="item.quantity"
+                               @change="updateQuantity(item.id, item.quantity)"
+                               class="w-12 text-center border rounded"/>
+                        <button @click="updateQuantity(item.id, item.quantity + 1)"
+                                class="px-2 py-1 border rounded">+</button>
+                    </td>
+
                     <td>₹ {{ item.quantity * item.product.price }}</td>
+
                     <td>
                         <button
                             @click="removeItem(item.id)"

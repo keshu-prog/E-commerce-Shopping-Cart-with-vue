@@ -1,8 +1,8 @@
 <header class="max-w-7xl mx-auto px-4 mb-6 flex items-center justify-between">
     <div class="flex items-center gap-2">
         <a href="{{ url('/') }}">
-        <img src="/logo.png" alt="Logo" class="h-10 w-10">
-        <span class="text-xl font-bold">Ecom</span>
+            <img src="/logo.png" alt="Logo" class="h-10 w-10">
+            <span class="text-xl font-bold">Ecom</span>
         </a>
     </div>
 
@@ -13,19 +13,25 @@
                    class="px-5 py-1.5 border rounded-sm text-sm">
                     Dashboard
                 </a>
-                <a href="{{ url('/cart') }}"
-                   class="px-5 py-1.5 border rounded-sm text-sm">
+
+                <a href="{{ url('/cart') }}" class="relative px-5 py-1.5 border rounded-sm text-sm">
                     View Cart
+                    @php
+                        $cartCount = auth()->user()->cartItem()->count(); 
+                    @endphp
+                    @if($cartCount > 0)
+                        <span class="absolute top-0 right-0 -mt-1 -mr-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                            {{ $cartCount }}
+                        </span>
+                    @endif
                 </a>
             @else
-                <a href="{{ route('login') }}"
-                   class="px-5 py-1.5 border rounded-sm text-sm">
+                <a href="{{ route('login') }}" class="px-5 py-1.5 border rounded-sm text-sm">
                     Log in
                 </a>
 
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}"
-                       class="px-5 py-1.5 border rounded-sm text-sm">
+                    <a href="{{ route('register') }}" class="px-5 py-1.5 border rounded-sm text-sm">
                         Register
                     </a>
                 @endif
