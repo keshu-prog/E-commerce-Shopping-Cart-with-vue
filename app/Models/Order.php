@@ -22,6 +22,8 @@ class Order extends Model
         'discount',
         'total',
         'status',
+        'address_id',
+        'added_by'
     ];
 
     protected $casts = [
@@ -57,6 +59,26 @@ class Order extends Model
     public function isCancelled(): bool
     {
         return $this->status === self::STATUS_CANCELLED;
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }
 

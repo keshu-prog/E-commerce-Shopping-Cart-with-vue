@@ -15,6 +15,7 @@ class RouteServiceProvider extends ServiceProvider
 {
     use ForwardsCalls;
 
+    public const HOME = '/';
     /**
      * The controller namespace for the application.
      *

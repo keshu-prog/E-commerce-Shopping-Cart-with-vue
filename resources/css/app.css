@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.add-to-cart-btn {
+    background-color: #25aada !important;
+    color: #ffffff !important;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #1d93b8 !important;
+}
