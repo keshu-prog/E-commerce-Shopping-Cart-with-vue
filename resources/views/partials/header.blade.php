@@ -13,6 +13,10 @@
                    class="px-5 py-1.5 border rounded-sm text-sm">
                     Dashboard
                 </a>
+                <a href="{{ url('/logout') }}"
+                   class="px-5 py-1.5 border rounded-sm text-sm">
+                    LogOut
+                </a>
 
                 <a href="{{ url('/cart') }}" class="relative px-5 py-1.5 border rounded-sm text-sm">
                     View Cart

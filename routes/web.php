@@ -23,7 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout/{order}', [OrderController::class, 'placeOrder'])->name('checkout.placeOrder');
     Route::get('/addresses', [OrderController::class, 'addressIndex'])->name('addresses.index');
     Route::post('/addresses', [OrderController::class, 'storeAddress'])->name('addresses.store');
-
+    Route::get('/logout', function() {
+        auth()->logout();
+        return redirect('/');
+    })->name('logout');
 });
 
 require __DIR__.'/auth.php';
