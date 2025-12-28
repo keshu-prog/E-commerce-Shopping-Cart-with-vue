@@ -77,6 +77,7 @@ const addToCart = async (product) => {
 
         alert('Product added to cart successfully!')
         window.dispatchEvent(new Event('cart-updated'))
+        window.location.reload()
     } catch (err) {
         console.error(err)
         alert('Failed to add to cart')
